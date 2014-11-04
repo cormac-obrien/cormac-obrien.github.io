@@ -2,4 +2,38 @@ body {
 	background-color: #002b36;
 	color: #839496;
 	font-family: 'Vollkorn', serif;
+	font-size: 150%;
+	font-weight: normal;
+	padding-left: 5%;
+	padding-top: 2.5%
+}
+
+a:link {
+	color: #268bd2;
+	text-decoration: none;
+}
+
+a:visited {
+	color: #268bd2;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #268bd2;
+	text-decoration: none;
+}
+
+a:active {
+	color: #268bd2;
+	text-decoration: none;
+}
+
+h1 {
+	color: #eee8d5;
+	font-size: 250%;
+	font-weight: normal;
+}
+
+h2 {
+	font-weight: normal;
 }
