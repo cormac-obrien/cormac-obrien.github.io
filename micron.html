@@ -1,0 +1,83 @@
+<h1>MICRON: A Simple Programming Language</h1>
+
+<h2>Acknowledgements</h2>
+
+<p>I would like to...</p>
+
+<h2>Introduction</h2>
+
+<h2>Lexical Analysis</h2>
+
+<h3>Lines</h3>
+
+<p>MICRON programs are divided into logical lines, each separated by a NEWLINE
+token. A logical line can span multiple physical lines, which are separated by
+an ASCII line feed.</p>
+
+<h3>Comments</h3>
+
+<p>MICRON uses C-style comments. Comments begin at <code>/*</code> and end at <code>*/</code>.</p>
+
+<pre><code>/* This is a comment. */
+
+/* This is also *
+ * a comment.   */
+</code></pre>
+
+<p>There are no single-line comments in MICRON.</p>
+
+<h3>Encoding</h3>
+
+<p>UTF-8 is the sole encoding supported by MICRON.</p>
+
+<h3>Line Joining</h3>
+
+<p>Lines in MICRON may be explicitly joined by placing a backslash <code>\</code> at the end
+of a line.</p>
+
+<pre><code>if x == 5 \
+  and y == 6:
+    /* do something */
+</code></pre>
+
+<p>MICRON implicitly joins lines inside delimiters. This means that array and
+struct definitions can span multiple lines.</p>
+
+<h3>Indentation</h3>
+
+<p>MICRON uses spaces for indentation. Hard tabs should not appear in source code.
+One level of indentation is four spaces. Indentation is the method for
+determining blocking/scoping. Anonymous scoping is permitted simply by indenting
+four spaces and dedenting when the block should be finished.</p>
+
+<h2>Keywords, Identifiers and Literals</h2>
+
+<h3>Keywords</h3>
+
+<p>The following words are reserved as keywords and may not be used for any other
+purpose.</p>
+
+<pre><code>and do elif else fn for if import not or struct while
+</code></pre>
+
+<h3>Literals</h3>
+
+<h4>Numbers</h4>
+
+<h4>Strings</h4>
+
+<h3>Operators</h3>
+
+<p>MICRON's operators are as follows.</p>
+
+<pre><code>+   -   *   /   %
+&lt;&lt;  &gt;&gt;  &amp;   |   ^   ~
+&lt;   &gt;   &lt;=  &gt;=  ==  !=
+</code></pre>
+
+<h3>Delimiters</h3>
+
+<p>MICRON's delimiters are as follows.</p>
+
+<pre><code>(   )   {   }   [   ]
+</code></pre>
