@@ -1,0 +1,220 @@
+<h2># Designing a Twitch Bot</h2>
+
+<p>In this tutorial, you'll implement a bot that moderates the chat for a channel
+on Twitch.tv. The bot will be able to connect to the Twitch chat server, read
+the channel chat, search for unwanted messages and spam, and timeout or ban the
+user who sent the message. I'll also provide ideas at the end of the tutorial
+for ways to usefully extend the bot.</p>
+
+<h3>Required Resources</h3>
+
+<ul>
+<li><strong>A basic understanding of Python.</strong> I use Python 3 in this tutorial, but
+Python 2 is similar enough that the tutorial can be easily translated.</li>
+<li><strong>A Python installation.</strong> You'll need this to run the bot.</li>
+<li><strong>A separate Twitch.tv account.</strong> You should <em>not</em> use your main account,
+as incorrectly implementing the bot can cause you to be banned (albeit
+only temporarily).</li>
+<li><strong>A terminal program.</strong> This will usually be Powershell or CMD on Windows,
+Terminal on Mac, or any of the dozens of terminal emulators for Linux, BSD
+and the like.</li>
+</ul>
+
+<h3>Writing the Bot</h3>
+
+<ol>
+<li><p><strong>Create a configuration module.</strong> This will allow you to change the
+details of your program quickly and cleanly. We'll place these settings in
+a file called <code>cfg.py</code>:</p>
+
+<pre><code># cfg.py
+HOST = "irc.twitch.tv"   # the Twitch IRC server
+PORT = 6667              # always use port 6667!
+NICK = "twitch_username" # your Twitch username, lowercase
+PASS = "oauth:xxxxxxxxx" # your Twitch OAuth token
+CHAN = "#channel"        # the channel you want to join
+</code></pre></li>
+<li><p><strong>Write the network functions.</strong> Twitch uses IRC as its chat protocol,
+which makes most communication trivial. Still, the code will end up much
+cleaner if we define some utility functions first. I've provided docstrings
+in compliance with <a href="https://www.python.org/dev/peps/pep-0257/">PEP 257</a>
+which will provide brief explanation of the functions.</p>
+
+<pre><code># bot.py
+
+
+def chat(sock, msg):
+    """
+    Send a chat message to the server.
+
+
+<pre><code>Keyword arguments:
+sock -- the socket over which to send the message
+msg  -- the message to be sent
+"""
+sock.send("PRIVMSG #{} :{}".format(cfg.CHAN, msg))
+</code></pre>
+
+def ban(sock, user):
+    """
+    Ban a user from the current channel.
+
+
+<pre><code>Keyword arguments:
+sock -- the socket over which to send the ban command
+user -- the user to be banned
+"""
+chat(sock, ".ban {}".format(user))
+</code></pre>
+
+def timeout(sock, user, secs=600):
+    """
+    Time out a user for a set period of time.
+
+
+<pre><code>Keyword arguments:
+sock -- the socket over which to send the timeout command
+user -- the user to be timed out
+secs -- the length of the timeout in seconds (default 600)
+"""
+chat(sock, ".timeout {}".format(user, secs))
+</code></pre>
+
+</code></pre>
+
+<p>Twitch supports a host of other IRC commands, which can be found <a href="
+http://help.twitch.tv/customer/portal/articles/659095-chat-moderation-
+commands">here</a>. These can be implemented much in the same way as the ban and
+timeout commands.</p></li>
+<li><p><strong>Connect to the Twitch IRC server.</strong> You'll need to get your Twitch OAuth
+token <a href="http://twitchapps.com/tmi">here</a> in order to log in. You should send
+your OAuth token, your username, and the channel you wish to join as shown
+below.</p>
+
+<pre><code>import cfg
+import socket
+
+
+s = socket.socket()
+s.connect((HOST, PORT))
+s.send("PASS {}\r\n".format(PASS).encode("utf-8"))
+s.send("NICK {}\r\n".format(NICK).encode("utf-8"))
+s.send("JOIN {}\r\n".format(CHAN).encode("utf-8"))
+</code></pre>
+
+<p>Joining a channel will give us a huge amount of text and also connect us to
+the channel chat, so we need to handle responses from the server
+continually. We'll do this with an infinite loop; you can interrupt the
+program with CTRL-C.</p>
+
+<pre><code>while True:
+    response = s.recv(1024).decode("utf-8")
+    print(response)
+    sleep(0.1)
+</code></pre>
+
+<p>Sleeping for a tenth of a second is barely noticeable to humans, but it
+drastically decreases the CPU time of the program without decreasing
+performance.</p></li>
+<li><p><strong>Make sure the server knows you're connected.</strong>
+IRC servers will "ping" your bot at regular intervals to make sure you're
+still connected: <code>PING :tmi.twitch.tv</code>. The bot should respond as soon as
+possible with <code>PONG :tmi.twitch.tv</code>.</p>
+
+<pre><code>while True:
+    response = s.recv(1024).decode("utf-8")
+    if response == "PING :tmi.twitch.tv\r\n":
+        s.send("PONG :tmi.twitch.tv\r\n".encode("utf-8"))
+    else:
+        print(response)
+</code></pre></li>
+<li><p><strong>Limit your messages to the server.</strong>
+In order to prevent users from spamming commands, Twitch limits how quickly
+a user can send IRC messages to the server. For regular users, this limit
+is set at 20 messages per 30 seconds; moderators may send up to 100
+messages per 30 seconds. Disobeying this limit will earn you an 8-hour ban
+from the IRC server.</p>
+
+<p>The simple way to handle this limit is to define the maximum send rate:</p>
+
+<pre><code># cfg.py
+RATE = (20/30) # messages per second
+</code></pre>
+
+<p>and then sleep for the inverse of that rate.</p>
+
+<pre><code># bot.py
+while True:
+    # ...
+    sleep(1 / cfg.RATE)
+</code></pre></li>
+<li><p><strong>Recognize messages to the chat.</strong>
+Not all messages from the server are worthy of the bot's attention. We
+don't need to know who's joining or leaving the channel, and it's not very
+important who the other moderators are. We do, however, want to see chat
+messages, which look like this:</p>
+
+<pre><code>:nickname!nickname@nickname.tmi.twitch.tv PRIVMSG #channel :message
+</code></pre>
+
+<p>IRC's formatting of a chat message is rather complicated, so we'll use a
+regular expression to pick out messages that match this pattern. Import
+Python's <a href="https://docs.python.org/3.4/library/
+re.html">regular expressions module</a>:</p>
+
+<pre><code>import re
+</code></pre>
+
+<p>and define the pattern we're looking for.</p>
+
+<pre><code># Make sure you prefix the quotes with an 'r'!
+CHAT_MSG=re.compile(r"^:\w+!\w+@\w+\.tmi\.twitch\.tv PRIVMSG #\w+ :")
+</code></pre>
+
+<p>Once we've determined that this is a chat message, we can strip out most of
+the text, since we only need one copy of the username and their message.
+First, we need to pick the username out of the string. The username will be
+the first substring made up solely of <em>regex word characters</em>, which
+consist of alphanumeric characters and underscores. Once we find the
+username, we can replace the ugly prefix with just the username and a
+colon.</p>
+
+<pre><code>username = re.search(r"\w+", line).group(0) # return the entire match
+message = CHAT_MSG.sub("", line)
+print(username + ": " + message)
+</code></pre></li>
+<li><p><strong>Register patterns and drop the banhammer.</strong>
+Once again, we'll use regex to match messages that contain unwanted
+patterns.  The most obvious of these patterns are individual words or
+phrases, which can simply be typed as they are into the regex. For more
+complicated or variable patterns, you'll need to look into more advanced
+regex; this can be used to ban links, phone numbers, addresses (physical
+and email), and other information that follows a particular pattern.</p>
+
+<p>Add a list of patterns to your config file:</p>
+
+<pre><code># cfg.py
+
+
+PATT = [
+    r"swear",
+    # ...
+    r"some_pattern"
+]
+</code></pre>
+
+<p>Now, in your source file, add a loop that checks each message for the pattern
+you (don't) want:</p>
+
+<pre><code>for pattern in cfg.PATT:
+    if re.match(pattern, line):
+        ban(s, username)
+        break
+</code></pre></li>
+<li><p><strong>Congratulations!</strong>
+You've successfully implemented a moderator bot for Twitch.tv. Of course, this
+tutorial only walks you through a fairly minimal implementation; in order to
+have functionality like that of Nightbot or Moobot, you'll have to do a bit
+more work. However, this bot provides a solid foundation for expansion and
+customization. Good luck!</p></li>
+</ol>
