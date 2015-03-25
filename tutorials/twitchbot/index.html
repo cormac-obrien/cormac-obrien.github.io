@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Cormac O'Brien</title>
+    <title>Designing a Twitch Bot</title>
     <link rel="stylesheet" type="text/css" href="style.css" />
     <link rel="icon" type="image/png" href="http://c-obrien.org/favicon16.png" />
   </head>
@@ -8,32 +8,41 @@
 
 <h2>Designing a Twitch Bot</h2>
 
-<p>In this tutorial, you'll implement a bot that moderates the chat for a channel
-on Twitch.tv. The bot will be able to connect to the Twitch chat server, read
-the channel chat, search for unwanted messages and spam, and timeout or ban the
-user who sent the message. I'll also provide ideas at the end of the tutorial
-for ways to usefully extend the bot.</p>
+<p>
+  In this tutorial, you'll implement a bot that moderates the chat for a
+  channel on Twitch.tv. The bot will be able to connect to the Twitch chat
+  server, read the channel chat, search for unwanted messages and spam, and
+  timeout or ban the user who sent the message. I'll also provide ideas at the
+  end of the tutorial for ways to usefully extend the bot.</p>
 
 <h3>Required Resources</h3>
 
 <ul>
-<li><strong>A basic understanding of Python.</strong> I use Python 3 in this tutorial, but
-Python 2 is similar enough that the tutorial can be easily translated.</li>
-<li><strong>A Python installation.</strong> You'll need this to run the bot.</li>
-<li><strong>A separate Twitch.tv account.</strong> You should <em>not</em> use your main account,
-as incorrectly implementing the bot can cause you to be banned (albeit
-only temporarily).</li>
-<li><strong>A terminal program.</strong> This will usually be Powershell or CMD on Windows,
-Terminal on Mac, or any of the dozens of terminal emulators for Linux, BSD
-and the like.</li>
+  <li>
+    <strong>A basic understanding of Python.</strong>
+    I use Python 3 in this tutorial, but Python 2 is similar enough that the
+    tutorial can be easily translated.</li>
+  <li>
+    <strong>A Python installation.</strong>
+    You'll need this to run the bot.</li>
+  <li>
+    <strong>A separate Twitch.tv account.</strong>
+    You should <em>not</em> use your main account, as incorrectly implementing
+    the bot can cause you to be banned (albeit only temporarily).</li>
+  <li>
+    <strong>A terminal program.</strong> This will usually be Powershell or CMD
+    on Windows, Terminal on Mac, or any of the dozens of terminal emulators for
+    Linux, BSD and the like.</li>
 </ul>
 
 <h3>Writing the Bot</h3>
 
 <ol>
-<li><p><strong>Create a configuration module.</strong> This will allow you to change the
-details of your program quickly and cleanly. We'll place these settings in
-a file called <code>cfg.py</code>:</p>
+  <li>
+    <p><strong>Create a configuration module.</strong>
+       This will allow you to change the details of your program quickly and
+       cleanly. We'll place these settings in a file called
+       <code>cfg.py</code>:</p>
 
 <pre><code># cfg.py
 HOST = "irc.twitch.tv"   # the Twitch IRC server
