@@ -14,22 +14,28 @@
   <hr />
 
   <h3>Overview</h3>
-
-  <p>
-      As of version 2.2.1, QEMU does not support emulation of a machine running
-      Mac OS 9. This GSoC project aims to implement support for OS 9.
-  </p>
+  <p>As of version 2.2.1, QEMU does not support emulation of a machine running
+     Mac OS 9. This GSoC project aims to implement support for OS 9.</p>
 
   <h3>Status</h3>
 
-  <p><b>2015.03.27</b>: The out-of-memory error occurs in
-  <code>bootinfo_init_program</code> while trying to allocate memory to load
-  the boot script. The script is only about 80 lines long, so it seems like the
-  <code>load-size</code> word isn't working properly.</p>
+  <h4>2015.03.27</h4>
+  <p>I've confirmed that OpenBIOS is able to find the boot script, and by
+     calculating the script size with <code>strlen()</code> instead of the
+     default method it successfully loads and begins execution (this is a
+     temporary workaround). Unfortunately the script still leads to a "No valid
+     state" error, which most likely means that the script fails to execute
+     properly.</p>
 
-  <p><b>2015.03.25</b>: OpenBIOS fails to boot from the OS 9.2.2 install ISO.
-  This appears to be the result of an out-of-memory error. The launch command
-  given is </p>
+  <h4>2015.03.26</h4>
+  <p>The out-of-memory error occurs in <code>bootinfo_init_program</code> while
+     trying to allocate memory to load the boot script. The script is only
+     about 80 lines long, so it would appear that OpenBIOS is incorrectly
+     calculating the size of the boot script.</p>
+
+  <h4>2015.03.25</h4>
+  <p>OpenBIOS fails to boot from the OS 9.2.2 install ISO. This appears to be
+  the result of an out-of-memory error. The launch command given is</p>
   <pre><code>$ qemu-system-ppc -m 256 -cdrom os9.iso -boot d</code></pre>
 
   <h3>References</h3>

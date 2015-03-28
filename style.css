@@ -55,7 +55,7 @@ hr {
     width: inherit;
 }
 
-pre {
+code {
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-color: #268bd2;
