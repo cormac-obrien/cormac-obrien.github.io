@@ -19,6 +19,20 @@
 
   <h3>Status</h3>
 
+  <h4>2015.03.29</h4>
+  <p>A more thorough examination of the code calculating the size of the boot
+     script shows that the file size is actually being calculated correctly,
+     but OS 9 expects the host firmware to stop loading at the ASCII EOT (0x04) 
+     immediately following the script.  It's not quite clear why the file is
+     padded out to 2.7 MB, but it may have to do with the Adler-32 checksum,
+     which takes the file size as a parameter.<p>
+
+  <h4>2015.03.28</h4>
+  <p>The script fails because it expects the host firmware to implement a word
+     <code>adler32</code>, which I can only assume is an Adler-32 checksum.
+     It's not entirely clear how OS 9 expects it to be implemented, but it
+     should be fairly close to the reference implementation (zlib).</p>
+
   <h4>2015.03.27</h4>
   <p>I've confirmed that OpenBIOS is able to find the boot script, and by
      calculating the script size with <code>strlen()</code> instead of the
@@ -41,6 +55,12 @@
   <h3>References</h3>
   <ul>
    <li><a href=http://docs.oracle.com/cd/E19253-01/806-1380-10/>FCode Specification</a></li>
+  </ul>
+
+  <h3>Acknowledgments</h3>
+  <ul>
+   <li>Alexander Graf</li>
+   <li>Mark Cave-Ayland</li>
   </ul>
 
  </body>
