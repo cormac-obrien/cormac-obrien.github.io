@@ -19,13 +19,27 @@
 
   <h3>Status</h3>
 
+  <h4>2015.04.08</h4>
+  <p>The out-of-memory error and Adler-32 patches have been submitted to the
+     OpenBIOS mailing list for review.</p>
+
+  <h4>2015.04.03</h4>
+  <p>I've added the Adler-32 checksum (adapted from Adler's original zlib
+     implementation), and the boot script accepts it. Thanks to Mark
+     Cave-Ayland for pointing out a stack order error.</p>
+
+  <h4>2015.04.02</h4>
+  <p>The new solution is to begin parsing the boot info SGML before allocating
+     memory, get the size of the boot script, and then allocate that memory.
+     This solution fixes the out-of-memory error.</p>
+
   <h4>2015.03.29</h4>
   <p>A more thorough examination of the code calculating the size of the boot
      script shows that the file size is actually being calculated correctly,
      but OS 9 expects the host firmware to stop loading at the ASCII EOT (0x04) 
      immediately following the script.  It's not quite clear why the file is
      padded out to 2.7 MB, but it may have to do with the Adler-32 checksum,
-     which takes the file size as a parameter.<p>
+     which takes the file size as a parameter.</p>
 
   <h4>2015.03.28</h4>
   <p>The script fails because it expects the host firmware to implement a word
