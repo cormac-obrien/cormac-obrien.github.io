@@ -70,3 +70,14 @@ code {
     padding-right: 5px;
     padding-top:   1px;
 }
+
+#name {
+    float:left;
+    position:relative;
+}
+
+#links {
+    float:right;
+    position:relative;
+    margin-top:1.5ex;
+}
