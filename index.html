@@ -1,41 +1,45 @@
 <!DOCTYPE html>
 <html>
  <head>
+  <meta charset='utf-8'>
   <title>Cormac O'Brien</title>
-  <link rel="stylesheet"
-        type="text/css"
-        href="http://fonts.googleapis.com/css?family=Open+Sans" />
-  <link rel="stylesheet"
-        type="text/css"
-        href="style.css" />
-  <link rel="icon"
-        type="image/png"
-        href="http://c-obrien.org/favicon16.png" />
+  <link rel='stylesheet' type='text/css' href='style.css' />
+  <link rel='icon' type='image/png' href='http://c-obrien.org/favicon16.png' />
  </head>
 
  <body>
-  <div id="name"><h1>Cormac O'Brien</h1></div>
-  <div id="links">
-   <a href="https://github.com/cormac-obrien"
-      id="links-github"
-      target="_blank">
-      <img src="res/github-mark-light-32px.png"
-           alt="GitHub"></a>
+  <h1 id='name'>Cormac O'Brien</h1>
 
+  <div id='links'>
+   <a href='https://github.com/cormac-obrien' target='_blank'>
+    <img src='res/github-mark-light-32px.png' alt='GitHub'>
+   </a>
 
-   <a href="https://www.linkedin.com/pub/cormac-o-brien/43/961/895"
-      id="links-linkedin"
-      target="_blank">
-      <img src="res/linkedin-in-white-34px-r.png"
-           alt="Linkedin"></a>
+   <a href='https://www.linkedin.com/pub/cormac-o-brien/43/961/895' target='_blank'>
+    <img src='res/linkedin-in-white-34px-r.png' alt='Linkedin'>
+   </a>
   </div>
 
-  <hr />
+  <div id='head-sep'></div>
 
+  <!-- End header, start body -->
+
+  <!-- Nav tree -->
+  <ul id='navtree'>
+   <li class='nav-page'><a href='contrib'>Open-Source Contributions</a></li>
+   <li>Projects
+    <ul>
+     <li class='nav-page'><a href='qemu-os9/'>OS 9 on Qemu</a></li>
+    </ul>
+   </li>
+  </ul>
+
+  <div id='main'>
   <h3>Current Project</h3>
   <p>
-   <a href="qemu-os9/">Implementing OS 9 Support in QEMU</a>
+   <a href='qemu-os9/'>Implementing OS 9 Support in QEMU</a>
   </p>
+  </div>
 
  </body>
 </html>
