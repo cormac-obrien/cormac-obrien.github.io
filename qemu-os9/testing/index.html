@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+  <head>
+    <title>GSoC 2015: QEMU OS 9 Support</title>
+    <link rel="stylesheet"
+          type="text/css"
+          href="../../style.css" />
+  </head>
+
+  <body>
+    <h2 style='float:left'>GSoC 2015</h2>
+    <h2 style='float:right'>Adding Support for Mac OS 9 to QEMU</h2>
+
+    <div id='head-sep'></div>
+
+    <h3>Testing</h3>
+
+    <p>Though emulation for OS 9 hasn't been perfected, there's enough visible
+       progress into the boot process that users may actually derive some
+       satisfaction from booting the operating system. If you want to see our
+       current progress, I've provided instructions on getting a testing
+       environment set up.</p>
+
+    <h4>Necessary Tools</h4>
+
+    <p>You'll need a fairly recent version of GCC to compile QEMU. I'm
+       currently using version 5.1.0, though older versions will work as well.
+       Most Linux distributions offer GCC in their package manager. I cannot
+       help with Mac OS X or Windows as I don't develop for those platforms,
+       but OS X is UNIX-compatible and should work with most of these
+       instructions.</p>
+
+    <p>You will also need to have Git installed; the
+       <a href='http://git-scm.com/download/'>Git Downloads page</a> has
+       instructions for all platforms. I'm using version 2.4.5, so if your
+       system uses an older version (e.g. Debian), my instructions may not
+       work for you.</p>
+
+    <p>Make sure that Python 2 is installed and that the system resolves
+       <code>python</code> to the Python 2 intepreter. Some systems
+       (particularly Arch Linux) use Python 3 by default, which will not
+       work.</p>
+
+    <h4>Setup</h4>
+
+    <p>Create the various testing directories:</p>
+
+    <pre><code>$ cd                                        # go to home directory
+$ mkdir -p os9-test/qemu{-build,-install}   # create build and install directories
+$ cd os9-test                               # we use this as the working directory</code></pre>
+
+    <p>Get the latest version of the <code>macos9</code> QEMU branch:</p>
+
+    <pre><code>$ git clone -b macos9 https://github.com/agraf/qemu.git</code></pre>
+
+    <p>Since this is a development branch, there are some unresolved issues.
+       We have to insert a dummy file to make the install complete:</p>
+
+    <pre><code>$ touch qemu/pc-bios/vgabios-virtio.bin</code></pre>
+
+    <p>Create a build directory and configure QEMU:</p>
+
+    <pre><code>$ mkdir build-qemu
+$ cd build-qemu
+$ ../qemu/configure --target-list=ppc-softmmu --prefix=$HOME/os9/qemu-install
+</pre></code>
+
+    <p>Now you can build and install QEMU. This may take a while.</p>
+
+    <pre><code>$ make &amp;&amp; make install</pre></code>
+
+    <p>Once you have QEMU installed, you'll need to grab our
+       <a href='https://www.dropbox.com/s/pfsv04vl7stcxsc/openbios-qemu.elf.xz?dl=1'>OpenBIOS binary</a>
+       and the OS 9
+       <a href='https://www.dropbox.com/s/dr902466cwvnaog/os9.iso.xz?dl=1'>install ISO</a> 
+       (you may be able to use a different ISO, but this is the one we're
+       testing with). Both are compressed with <code>xz</code> because of their
+       large file size; your OS should have a utility for decompressing
+       them.</p>
+
+    <p>Leave the build directory.</p>
+
+    <pre><code>$ cd ..</code></pre>
+
+    <p>Your directory should now look like this:</p>
+
+    <pre><code>os9-test/
+├ openbios-qemu.elf
+├ os9.iso
+├ qemu/
+├ qemu-build/
+└ qemu-install/</code></pre>
+
+    <p>Run QEMU with the following command:</p>
+
+    <pre><code>$ cd ..
+$ qemu-install/bin/qemu-system-ppc \
+&gt; -bios openbios-qemu.elf \
+&gt; -boot d \
+&gt; -cdrom ~/iso/os9.iso \
+&gt; -M mac99 \
+&gt; -m 512</pre></code>
+
+    <p>I'd recommend putting this in a shell script so you don't have to type
+       it in every time.</p>
+
+    <h3>Contact Me</h3>
+    <p>If you have any trouble with the environment setup, or if I've made an
+       error or omission, please don't hesitate to contact me. My email is my
+       first name @ this domain.
+
+  </body>
+</html>
