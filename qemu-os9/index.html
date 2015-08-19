@@ -14,38 +14,55 @@
     <div id='head-sep'></div>
 
     <h3>Overview</h3>
-    <p>As of version 2.2.1, QEMU does not support emulation of a machine running
-       Mac OS 9. This GSoC project aims to implement support for OS 9.</p>
+    <p>As of version 2.2.1, QEMU does not support emulation of a machine
+       running Mac OS 9. This GSoC project aims to implement support for OS
+       9.</p>
 
     <h3>Testing</h3>
-    <p>I will be adding instructions on getting our setup up and running soon.</p>
-    <!--
-    <p>If you'd like to see our current progress (as of July 1), grab a copy of OpenBIOS:</p>
-    <pre><code>$ svn co svn://openbios.org/openbios/trunk/openbios-devel
-$ cd openbios-devel</code></pre>
-    <p>Apply the patch found
-      <a href='http://www.openfirmware.info/pipermail/openbios/2015-June/008722.html'>here</a>
-      and build:</p>
-    <pre><code>$ config/scripts/switch-arch ppc
-$ make</code></pre>
-  -->
+    <p>See the <a href='http://c-obrien.org/qemu-os9/testing/'>testing
+       page</a> for information on viewing our progress.</p>
 
     <h3>Log</h3>
+    <h4>2015.08.18</h4>
+    <p>It appears that OS 9 is attempting to write to the OHCI HcDoneHead
+       register, which QEMU doesn't support. This doesn't seem like a common
+       operation, and most documentation marks the register read-only.</p>
+    <p>We've also determined that it's possible to skip into Macsbug by
+       holding the control key when the splash screen appears.</p>
+
+    <h4>2015.08.17</h4>
+    <p>The (hopefully) final changes to OpenBIOS have been sent out to the
+       mailing list for review. They are:</p>
+    <ul>
+      <li>
+        <a href='http://www.openfirmware.info/pipermail/openbios/2015-August/008764.html'>
+           ppc: fix up power-mgt properties</a></li>
+      <li>
+        <a href='http://www.openfirmware.info/pipermail/openbios/2015-August/008765.html'>
+           ppc: add ESCC legacy support</a></li>
+      <li>
+        <a href='http://www.openfirmware.info/pipermail/openbios/2015-August/008766.html'>
+           ppc: fix CUDA ADB packet header format</a></li>
+      <li>
+        <a href='http://www.openfirmware.info/pipermail/openbios/2015-August/008766.html'>
+           ppc: fix up IDE device tree and control transfer</a></li>
+    </ul>
+
     <h4>2015.07.01</h4>
-    <p>Alex has made significant progress on CUDA and ADB emulation. However, a
-    fix to the ADB bus has broken OpenBIOS's keyboard detection.</p>
+    <p>Alex has made significant progress on CUDA and ADB emulation. However,
+       a fix to the ADB bus has broken OpenBIOS's keyboard detection.</p>
 
     <h4>2015.06.20</h4>
     <p>Six OpenBIOS patches have been committed to trunk &mdash; see OpenBIOS
        revisions 1341 through 1346.</p>
 
     <h4>2015.06.18</h4>
-    <p>A number of outstanding OpenBIOS patches have been reworked and reviewed.
-       They are now waiting to be committed to OpenBIOS trunk.</p>
+    <p>A number of outstanding OpenBIOS patches have been reworked and
+       reviewed.  They are now waiting to be committed to OpenBIOS trunk.</p>
 
     <h4>2015.05.10</h4>
-    <p>The Adler-32 patch has been reviewed by both Mark Cave-Ayland and Andreas
-       Färber.<p>
+    <p>The Adler-32 patch has been reviewed by both Mark Cave-Ayland and
+       Andreas Färber.<p>
 
     <h4>2015.04.27</h4>
     <p>The project has been accepted into Google Summer of Code 2015!</p>
