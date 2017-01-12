@@ -3,43 +3,32 @@
  <head>
   <meta charset='utf-8'>
   <title>Cormac O'Brien</title>
-  <link rel='stylesheet' type='text/css' href='style.css' />
+  <link rel='stylesheet' type='text/css' href='hack.css' />
+  <link rel='stylesheet' type='text/css' href='solarized-dark.css' />
   <link rel='icon' type='image/png' href='http://c-obrien.org/favicon16.png' />
  </head>
 
- <body>
-  <h1 id='name'>Cormac O'Brien</h1>
-
-  <div id='links'>
-   <a href='https://github.com/cormac-obrien' target='_blank'>
-    <img src='res/github-mark-light-32px.png' alt='GitHub'>
-   </a>
-
-   <a href='https://www.linkedin.com/pub/cormac-o-brien/43/961/895' target='_blank'>
-    <img src='res/linkedin-in-white-34px-r.png' alt='Linkedin'>
-   </a>
-  </div>
-
-  <div id='head-sep'></div>
-
-  <!-- End header, start body -->
-
-  <!-- Nav tree -->
-  <ul id='navtree'>
-   <li class='nav-page'><a href='contrib'>Open-Source Contributions</a></li>
-   <li>Projects
+ <body class='hack solarized-dark'>
+  <a href="https://github.com/you">
+   <img style="position: absolute; top: 0; right: 0; border: 0;"
+        src="github-ribbon.png" alt="Fork me on GitHub">
+  </a>
+  <div class='grid -center'>
+   <!-- sidebar -->
+   <aside class='container cell -3of12'>
+    <h1>Cormac O'Brien</h1>
+    <p>Now with 100% more Rust!</p>
+    <h2>Projects</h2>
     <ul>
-     <li class='nav-page'><a href='qemu-os9/'>OS 9 on Qemu</a></li>
+     <li><a href='http://c-obrien.org/richter/'>richter</a>, a Quake engine</li>
     </ul>
-   </li>
-  </ul>
+   </aside>
 
-  <div id='main'>
-  <h3>Current Project</h3>
-  <p>
-   <a href='qemu-os9/'>Implementing OS 9 Support in QEMU</a>
-  </p>
+   <!-- main content -->
+   <main class='cell -9of12'>
+    <h1>Hey, I'm Mac!</h1>
+    <p>I'm a developer with a passion for complex, high-performance systems.</p>
+   </main>
   </div>
-
  </body>
 </html>
