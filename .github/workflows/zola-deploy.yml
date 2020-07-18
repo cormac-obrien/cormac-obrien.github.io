@@ -1,0 +1,17 @@
+on:
+  push:
+    branches:
+      - develop
+name: Build and deploy to master on push to develop
+jobs:
+  build:
+    name: shalzz/zola-deploy-action
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: 'Build and deploy'
+        uses: shalzz/zola-deploy-action@master
+        env:
+          BUILD_DIR: .
+          PAGES_BRANCH: master
+          TOKEN: '${{ github.actor }}:${{ secrets.ZOLA_BUILD_TOKEN }}'

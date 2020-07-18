@@ -1,0 +1,253 @@
+// reset
+html {
+ box-sizing: border-box;
+ font-size: 16px;
+}
+
+*, *:before, *:after {
+ box-sizing: inherit;
+}
+
+body, h1, h2, h3, h4, h5, h6, p, ol, ul {
+ margin: 0;
+ padding: 0;
+ font-weight: normal;
+}
+
+ol, ul {
+ list-style: none;
+}
+
+img {
+ max-width: 100%;
+ height: auto;
+}
+
+// load fonts
+// $full-name: function to generate full name
+// $family-names: list of family names
+// $weight-names: map from weight name to css font-weight
+// $style-names: map from style name to css font-style
+@mixin load-font-family($full-name, $family-names, $weight-names, $style-names) {
+ @each $family in $family-names {
+  @each $weight-name, $weight in $weight-names {
+   @each $style-name, $style in $style-names {
+    @font-face {
+     font-family: $family;
+     $name: call(get-function($full-name), $family, $weight-name, $style-name);
+     src: url("/fonts/" + $name + ".woff2") format("woff2"),
+       url("/fonts/" + $name + ".woff") format("woff");
+     font-style: $style;
+     font-weight: $weight;
+    }
+   }
+  }
+ }
+}
+
+$dejavu-family-names: "DejaVuSans" "DejaVuSansMono";
+$dejavu-weight-names: ("": normal, "Bold": bold);
+$dejavu-style-names: ("": normal, "Oblique": oblique);
+
+@function dejavu-full-name($family, $weight, $style) {
+ $result: "";
+
+ @if str-length($weight) != 0 or str-length($style) != 0 {
+  $result: $family + "-" + $weight + $style;
+ } @else {
+  $result: $family
+ }
+
+ @return $result;
+}
+
+@include load-font-family(dejavu-full-name, $dejavu-family-names, $dejavu-weight-names, $dejavu-style-names);
+
+$titillium-family-names: "TitilliumWeb";
+$titillium-weight-names: ("ExtraLight": 200, "Light": 300, "Regular": 400, "SemiBold": 600, "Bold": 700);
+$titillium-style-names: ("": normal, "Italic": italic);
+
+@function titillium-full-name($family, $weight, $style) {
+ @return $family + "-" + $weight + $style;
+}
+
+@include load-font-family(
+ titillium-full-name,
+ $titillium-family-names,
+ $titillium-weight-names,
+ $titillium-style-names);
+
+$color-accent: #eeeeee;
+$color-base: #bbbbbb;
+$color-link: #268bd2;
+$font-stack-display: "TitilliumWeb", sans-serif;
+$font-stack-sans-serif: "DejaVuSans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+$font-size: 2.5vh;
+
+a {
+ color: $color-link;
+ text-decoration: none;
+ transition: color 0.2s;
+
+ &:hover {
+     color: $color-accent;
+ }
+}
+
+body {
+ background-attachment: fixed;
+ background-color: #111111;
+ background-image:
+  linear-gradient(to right, #222222 2px, transparent 1px),
+  linear-gradient(to bottom, #222222 2px, transparent 1px);
+ background-size: 80px 80px;
+
+ color: $color-base;
+ font-family: $font-stack-display;
+ font-size: $font-size;
+}
+
+h1,h2,h3,h4 {
+ color: $color-accent;
+ font-family: $font-stack-display;
+ font-weight: 600;
+}
+
+.fade-out {
+ background-image: linear-gradient(to bottom, rgba(#111111, 0), rgba(#111111, 1) 90%);
+ bottom: 0;
+ height: 4em;
+ position: fixed;
+ width: 100%;
+}
+
+.index {
+ align-items: center;
+ display: grid;
+
+ @include media-tablet-landscape-down {
+  padding: 15%;
+  grid-template-rows: [top] auto [center] auto [bottom];
+  row-gap: 5%;
+
+  &-contact {
+   grid-row-start: top;
+   grid-row-end: center;
+   justify-self: center;
+  }
+
+  &-content {
+   grid-row-start: center;
+   grid-row-end: bottom;
+   justify-self: top;
+
+   h1 {
+    text-align: center;
+   }
+  }
+ }
+
+ @include media-tablet-landscape-up {
+  padding: 10%;
+  grid-template-columns: [left] 33% [center] auto [right];
+  column-gap: 5%;
+
+  &-contact {
+   grid-column-start: left;
+   grid-column-end: center;
+   justify-self: center;
+  }
+
+  &-content {
+   grid-column-start: center;
+   grid-column-end: right;
+   align-self: start;
+   padding-top: 5vw;
+  }
+ }
+
+ &-contact {
+  display: flexbox;
+  flex-direction: column;
+  max-width: 360px;
+
+  &-avatar {
+   height: auto;
+
+   border: 5px solid $color-accent;
+   border-radius: 50%;
+  }
+
+  &-items {
+   width: 100%;
+   margin-top: 5%;
+   display: flex;
+   list-style-type: none;
+
+   @include media-tablet-landscape-down {
+    flex-flow: row nowrap;
+    justify-content: space-around;
+   }
+
+   @include media-tablet-landscape-up {
+    flex-direction: column;
+   }
+
+   &-item {
+    margin: 4px;
+
+    a {
+     display: grid;
+     column-gap: 5%;
+     grid-template-columns: [left] 25% [center] auto [right];
+
+     @include media-tablet-landscape-down {
+      display: block;
+     }
+
+     transition: color 0.2s;
+
+     &:hover {
+      color: $color-accent;
+     }
+
+     // font-awesome icons
+     i {
+      align-self: center;
+      justify-self: right;
+      grid-column-start: left;
+      grid-column-end: center;
+
+      @include media-tablet-landscape-down {
+          font-size: 5vh;
+      }
+
+      @include media-tablet-landscape-up {
+          font-size: 24pt;
+      }
+     }
+
+     // handles
+     // only display on widescreen
+     span {
+      justify-self: left;
+      grid-column-start: center;
+      grid-column-end: right;
+
+      @include media-tablet-landscape-down {
+       display: none;
+      }
+     }
+    }
+   }
+  }
+ }
+
+ p {
+     margin-bottom: $font-size;
+ }
+}
+
+.index-contact {
+ flex-basis: 50%;
+}
